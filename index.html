@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edusense</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-theme="pink">
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Theme Selector Floating Action Button -->
+  <div class="theme-fab-wrap">
+    <button class="theme-fab" id="themeFabBtn" aria-label="Change theme">🎨</button>
+    <div class="theme-panel" id="themePanel">
+      <button class="theme-opt" data-theme="pink" onclick="setTheme('pink')"><span class="swatch-dot pink"></span>Baby Pink</button>
+      <button class="theme-opt" data-theme="lavender" onclick="setTheme('lavender')"><span class="swatch-dot lavender"></span>Lavender</button>
+      <button class="theme-opt" data-theme="mint" onclick="setTheme('mint')"><span class="swatch-dot mint"></span>Mint</button>
+      <button class="theme-opt" data-theme="orange" onclick="setTheme('orange')"><span class="swatch-dot orange"></span>Orange</button>
+      <button class="theme-opt" data-theme="dark" onclick="setTheme('dark')"><span class="swatch-dot dark"></span>Dark</button>
+    </div>
+  </div>
+
+  <!-- ================= HOME ================= -->
+  <section id="screen-home" class="screen active">
+    <div class="topbar"><div class="brand"><div class="leaf">🌸</div><span>Edusense</span></div></div>
+    <div class="hero">
+      <div class="eyebrow">Edusense · Personalised Adaptive Learning</div>
+      <h1 class="display">Study smarter,<br>stress a little less.</h1>
+      <p class="lead">Tell us your exam, your subjects and where you stand today — we'll calculate your focus priorities, keep an active countdown running, and test your exam readiness.</p>
+      <button class="btn" id="getStartedBtn" onclick="goto('auth')">Get started 🌷</button>
+      <span class="altlink" onclick="goto('auth')">Already have a profile? Log in →</span>
+      <div class="doodle-row">
+        <div class="doodle-chip">📅 Exam countdown</div>
+        <div class="doodle-chip">🎯 Priority engine</div>
+        <div class="doodle-chip">⚡ Boost breaks</div>
+        <div class="doodle-chip">🎓 Gated subject assessments</div>
+      </div>
+    </div>
+  </section>
+ <!-- ================= AUTH SCREEN ================= -->
+    <section id="screen-auth" class="screen">
+      <div class="top-bar">
+        <button class="back-link" onclick="goto('home')">← Back</button>
+      </div>
+      <div style="max-width: 480px; margin: 0 auto; width: 100%;">
+        <!-- Clean Tab Switcher -->
+        <div style="display:flex; gap:10px; margin-bottom:16px;">
+          <button id="tabBtnLogin" class="btn small" type="button" onclick="switchAuthTab('login')">Log In</button>
+          <button id="tabBtnSignup" class="btn secondary small" type="button" onclick="switchAuthTab('signup')">Sign Up</button>
+        </div>
+
+      <!-- 1. Log In Card (Clean: No Dropdowns / No Saved Accounts) -->
+      <div id="authLoginBox" class="card">
+        <div class="page-title">
+          <div class="eyebrow">Welcome Back</div>
+          <h2>Log in to your profile</h2>
+        </div>
+        <label>Enter Name or Username</label>
+        <input id="loginUser" type="text" placeholder="e.g. Ananya Sharma" onkeydown="if(event.key==='Enter')handleLogin()"/>
+        <p class="req-note" id="loginMsg" style="color:var(--accent); font-size:12px; margin-top:6px;"></p>
+        <button class="btn" style="width:100%; margin-top:12px;" onclick="handleLogin()">Log In</button>
+      </div>
+
+      <!-- 2. Sign Up Card -->
+      <div id="authSignupBox" class="card" style="display:none;">
+        <div class="page-title">
+          <div class="eyebrow">Create Profile</div>
+          <h2>Sign up for EduSense</h2>
+        </div>
+        
+        <label>Full Name *</label>
+        <input id="signupName" type="text" placeholder="e.g. Rahul Sharma" />
+
+        <label style="margin-top:10px;">Email Address *</label>
+        <input id="signupEmail" type="email" placeholder="e.g. rahul@example.com" />
+
+        <label style="margin-top:10px;">Class / Course</label>
+        <input id="signupClass" type="text" placeholder="e.g. B.Tech 1st Year / Class 12" />
+
+        <p class="req-note" id="signupMsg" style="color:var(--accent); font-size:12px; margin-top:6px;"></p>
+        <button class="btn" style="width:100%; margin-top:12px;" onclick="handleSignup()">Continue to Setup 🌸</button>
+      </div>
+    </section>
+    
+
+  <!-- ================= SETUP ================= -->
+  <section id="screen-setup" class="screen">
+    <div class="topbar"><div class="brand"><div class="leaf">🌸</div><span>Edusense</span></div></div>
+    <div class="wrap" style="max-width:760px;">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="page-title">
+        <div class="eyebrow">Set up your profile</div>
+        <h2>Let's set you up</h2>
+        <p class="small-muted">Configure your target exam and current topic mastery.</p>
+      </div>
+
+      <div class="card">
+        <div class="grid2">
+          <div><label>Your name</label><input id="stuName" type="text" placeholder="e.g. Ananya Sharma" /></div>
+          <div><label>Email</label><input id="stuEmail" type="email" placeholder="e.g. ananya@example.com" /></div>
+        </div>
+        <div class="grid2" style="margin-top:14px;">
+          <div><label>Class / Course</label><input id="stuClass" type="text" placeholder="e.g. 1st Year B.Tech" /></div>
+          <div>
+            <label>Target Exam</label>
+            <select id="examType" onchange="onExamTypeChange()">
+              <option value="">Select exam</option>
+              <option value="JEE">JEE (Main/Advanced)</option>
+              <option value="GATE">GATE</option>
+              <option value="NEET">NEET</option>
+              <option value="CBSE">CBSE Board</option>
+              <option value="ICSE">ICSE Board</option>
+              <option value="State Board">State Board</option>
+              <option value="Custom">Semester / Other</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:14px;">
+          <label>Target Exam Date</label>
+          <input id="examDate" type="date" />
+        </div>
+
+        <div class="suggest-box" id="suggestBox" style="display:none;">
+          <div class="label">Suggested subjects — tap to add</div>
+          <div class="chip-list" id="suggestChips"></div>
+        </div>
+
+        <div style="margin-top:20px;">
+          <label style="margin-bottom:0;">Subjects, Topics & Current Progress</label>
+          <p class="req-note">At least <strong>3 subjects</strong> are required to build your priority plan.</p>
+          <div id="subjectRows"></div>
+          <button class="btn secondary small" onclick="addSubjectRow()">+ Add another subject</button>
+        </div>
+
+        <div style="text-align:right; margin-top: 18px;">
+          <button class="btn" id="submitSetupBtn" onclick="submitSetup()">Build my dashboard 🌸</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= DASHBOARD ================= -->
+  <section id="screen-dashboard" class="screen">
+    <div class="wrap">
+      <div class="page-title flex-between">
+        <div>
+          <div class="eyebrow" id="dashGreetTime">Welcome back</div>
+          <h2 id="dashGreetName">Hi there 🌷</h2>
+        </div>
+        <div style="text-align:right;">
+          <span class="save-indicator" id="saveIndicator">Saved ✓</span><br/>
+          <button class="btn ghost small" onclick="logout()">Log out</button>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card countdown-card">
+          <label>Exam Countdown — <span id="dashExamName">Exam</span></label>
+          <div class="countdown-nums" id="countdownNums">
+            <div><div class="n">--</div><div class="l">Days</div></div>
+            <div><div class="n">--</div><div class="l">Hrs</div></div>
+            <div><div class="n">--</div><div class="l">Min</div></div>
+            <div><div class="n">--</div><div class="l">Sec</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <label>Overall Progress</label>
+          <div class="ring-wrap">
+            <div class="ring">
+              <svg width="96" height="96">
+                <circle cx="48" cy="48" r="40" stroke="var(--border)" stroke-width="10" fill="none"/>
+                <circle id="ringProgress" cx="48" cy="48" r="40" stroke="var(--primary-dark)" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
+              </svg>
+              <div class="pct" id="ringPct">0%</div>
+            </div>
+            <div><p style="margin:0;" id="progressBlurb">Add your subjects to compute priorities.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <label>🎯 Today's Priority Focus</label>
+          <h3 id="priorityTopic" style="font-size:20px;">—</h3>
+          <p class="why" id="priorityWhy"></p>
+          <span class="pill HIGH" id="priorityPill">HIGH</span>
+        </div>
+        <div class="card">
+          <label>✅ Action Checklist</label>
+          <div id="todayTasks"></div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <label>💌 Daily Encouragement</label>
+          <div class="quote-box" id="quoteBox">Loading a thought…</div>
+          <button class="btn ghost small" onclick="newQuote()">Another thought →</button>
+        </div>
+        <div class="card">
+          <label>📺 Study Links</label>
+          <div id="resourceList"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STUDY PLANNER ================= -->
+  <section id="screen-planner" class="screen">
+    <div class="wrap">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="page-title">
+        <div class="eyebrow">Adaptive Study Planner</div>
+        <h2>What to study, in what order</h2>
+        <p class="small-muted">Calculated strictly by days remaining to target exam and completion rate.</p>
+      </div>
+      <div id="plannerList"></div>
+    </div>
+  </section>
+
+  <!-- ================= PROGRESS ================= -->
+  <section id="screen-progress" class="screen">
+    <div class="wrap">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="page-title">
+        <div class="eyebrow">Progress Check-in</div>
+        <h2>How's it going today?</h2>
+        <p class="small-muted">Update completion percentages (reach 80% to unlock assessments!).</p>
+      </div>
+      <div class="card"><label>Subject Progress Sliders</label><div id="progressSliders"></div></div>
+      <div class="card">
+        <label>What did you study today?</label>
+        <textarea id="journalInput" rows="4" placeholder="e.g. Solved 6 vectors questions, revised fringe width formulas in Wave Optics..."></textarea>
+        <div style="text-align:right; margin-top:10px;"><button class="btn small" onclick="saveJournal()">Save Entry</button></div>
+      </div>
+      <div class="card"><label>Past Check-ins</label><div id="journalLog"></div></div>
+    </div>
+  </section>
+
+  <!-- ================= BOOST BREAK ================= -->
+  <section id="screen-boost" class="screen">
+    <div class="wrap">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="page-title">
+        <div class="eyebrow">Quick & Fun · Mental Reset</div>
+        <h2>Boost break ⚡</h2>
+        <p class="small-muted">A 2-minute pick-me-up between study sessions.</p>
+      </div>
+      <div id="boostArea"></div>
+    </div>
+  </section>
+
+  <!-- ================= SUBJECT ASSESSMENT ================= -->
+  <section id="screen-assessment" class="screen">
+    <div class="wrap">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="page-title">
+        <div class="eyebrow">Exam-Level Practice Tests</div>
+        <h2>Subject Assessments 🎓</h2>
+        <p class="small-muted">Test your core concepts across Easy, Medium, and Hard level problems.</p>
+      </div>
+      <div id="assessContainer"></div>
+    </div>
+  </section>
+
+  <!-- ================= PROFILE ================= -->
+  <section id="screen-profile" class="screen">
+    <div class="wrap">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="page-title">
+        <div class="eyebrow">Account & Records</div>
+        <h2>User Profile</h2>
+        <p class="small-muted">Your personal details, target exam settings, and saved assessment records.</p>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+      <label>Your Profile Details</label>
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:14px; margin-bottom:20px;">
+        <div>
+          <span class="small-muted">FULL NAME</span>
+          <div id="profDisplayName" style="font-weight:700; font-size:16px; color:var(--text);">—</div>
+        </div>
+        <div>
+          <span class="small-muted">EMAIL ADDRESS</span>
+          <div id="profDisplayEmail" style="font-weight:700; font-size:15px; color:var(--text);">—</div>
+        </div>
+        <div>
+          <span class="small-muted">CLASS / COURSE</span>
+          <div id="profDisplayClass" style="font-weight:700; font-size:15px; color:var(--text);">—</div>
+        </div>
+        <div class="grid2" style="gap:10px;">
+          <div>
+            <span class="small-muted">TARGET EXAM</span>
+            <div id="profDisplayExam" style="font-weight:700; font-size:15px; color:var(--text);">—</div>
+          </div>
+          <div>
+            <span class="small-muted">EXAM DATE</span>
+            <div id="profDisplayDate" style="font-weight:700; font-size:15px; color:var(--text);">—</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn" style="width:100%;" onclick="openSetupForEdit()">
+        Update Dashboard & Subjects ⚙️
+      </button>
+    </div>
+
+        <div class="card">
+          <label>Saved Assessment History</label>
+          <div id="profileAssessmentHistory" style="margin-top: 12px;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom Navigation Bar -->
+  <nav id="bottomnav">
+    <button class="navbtn" data-s="dashboard" onclick="goto('dashboard')"><span class="ic">🏠</span>Home</button>
+    <button class="navbtn" data-s="planner" onclick="goto('planner')"><span class="ic">📖</span>Planner</button>
+    <button class="navbtn" data-s="progress" onclick="goto('progress')"><span class="ic">📈</span>Progress</button>
+    <button class="navbtn" data-s="boost" onclick="goto('boost')"><span class="ic">⚡</span>Boost</button>
+    <button class="navbtn" data-s="assessment" onclick="goto('assessment')"><span class="ic">🎓</span>Assessment</button>
+    <button class="navbtn" data-s="profile" onclick="goto('profile')"><span class="ic">👤</span>Profile</button>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+</html>
